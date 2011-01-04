@@ -1,3 +1,4 @@
+$: << File.expand_path(File.dirname(__FILE__))
 require 'test/unit'
 load 'timelog.rb'
 
