@@ -1,15 +1,25 @@
 class Matcher
   def match(expected, actual, clip_limit, delta) 
-    # Clip "too-large" values
-    actual = actual.map { |val| [val, clip_limit].min }
+    actual = clip_large_values_from(actual, clip_limit)
 
-    # Check for length differences
-    return false if actual.length != expected.length
+    return false if lengths_differ?(actual, expected)
 
-    # Check that each entry is within expected +/- delta
+    all_entries_within_expected_delta?(expected, actual, delta)
+  end
+
+  def clip_large_values_from(array, limit)
+    array.map { |val| [val, limit].min }
+  end
+
+  def lengths_differ?(actual, expected)
+    actual.length != expected.length
+  end
+
+  def all_entries_within_expected_delta?(expected, actual, delta)
     actual.each_index { |i|
       return false if (expected[i] - actual[i]).abs > delta
     }
     return true
   end
+
 end
